@@ -1,14 +1,17 @@
+import re
 import pandas as pd
-import  numpy as np
+import numpy as np
+from proc import Proc as p
 
 if __name__ == '__main__':
     dataArr = pd.read_csv("../Files/201709301651_masters_portal.csv")
-    print(dataArr)
-    df = pd.DataFrame(dataArr)
-    dataArr = df.drop(columns=['country_code', 'university_rank', 'city', 'program_url'])
-    print(dataArr)
-    df = pd.DataFrame(dataArr)
-    dataArr = df[df.tution_2_money.notnull() & df.program_name.notnull()]
-    print(dataArr)
+    dataArr.head()
+    p.clean_non_important_inplace(dataArr)
+    p.clean_program_inplace(dataArr)
+    p.clean_ielts_scores_inplace(dataArr)
+    p.clean_duration_inplace(dataArr)
+    p.clean_duration_inplace(dataArr)
 
-
+    # Save the cleaned dataset to the same CSV file
+    dataArr.to_csv('../Files/output.csv', index=True)
+    # print(dataArr)
