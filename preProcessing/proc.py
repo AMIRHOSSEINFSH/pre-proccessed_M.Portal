@@ -1,6 +1,9 @@
 import time
 
 import pandas as pd
+import re
+import collections.abc
+import pandas as pd
 from pandas import DataFrame, Series
 from pandas.io.parsers import TextFileReader
 import re
@@ -175,6 +178,28 @@ class Proc:
         data.loc[mask, 'deadline'] = data.loc[mask, 'start_date'] - timedelta(days=365)
 
     @staticmethod
+    def __clean_structures(data: DataFrame) -> None:
+
+        array = data['structure']
+
+        statementArrays = ["I have good knowledge in ", "I am interested in ",
+                           "I have good grade at ", "I love to Continue in "]
+
+        new_row = []
+        for i, row in enumerate(array):
+            newArray = []
+            if type(row) is not float:
+                for item in row.split(","):
+                    item = re.sub(r"'", "", item)
+                    item = re.sub(r"\[", "", item)
+                    item = re.sub(r"\]", "", item)
+                    item = re.sub(r'\([^()]*\)', '', item)
+                    newArray.append(random.choice(statementArrays) + item)
+            new_row.append(newArray)
+
+        data['structure'] = new_row
+
+    @staticmethod
     def preprocess(data: DataFrame) -> None:
         Proc.__rename_columns_inplace(data)
         Proc.__clean_non_important_inplace(data)
@@ -183,3 +208,4 @@ class Proc:
         Proc.__clean_duration_inplace(data)
         Proc.__clean_tuition_inplace(data)
         Proc.__clean_dates(data)
+        Proc.__clean_structures(data)
