@@ -10,6 +10,7 @@ import re
 import math
 import numpy as np
 from datetime import datetime, timedelta
+import random
 
 
 class Proc:
